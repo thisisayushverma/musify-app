@@ -87,19 +87,22 @@ app.get('/api/get-audio/:audioId/:bitrate', async (req, res) => {
 
     res.cookie('CloudFront-Policy', policyStringBase64, {
         httpOnly: true,
-        domain: 'cloudfront.net',
+        secure: true,
+        domain: '.ayushverma.dev',
         sameSite: 'none',
         path: '/',
     })
     res.cookie('CloudFront-Signature', signature, {
         httpOnly: true,
-        domain: 'cloudfront.net',
+        secure: true,
+        domain: '.ayushverma.dev',
         sameSite: 'none',
         path: '/',
     })
     res.cookie('CloudFront-Key-Pair-Id', keyPairId, { 
         httpOnly: true,
-        domain: 'cloudfront.net',
+        secure: true,
+        domain: '.ayushverma.dev',
         sameSite: 'none',
         path: '/',
     })
