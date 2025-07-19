@@ -28,6 +28,7 @@ import testRoutes from "./routes/testFunc.routes.js"
 import { readAllFileInsideFolderAndUploadToS3 } from "./utils/operationOnFile.js"
 import { getAudioStream } from "./utils/awsS3Bucket.js";
 import authRoutes from "./routes/auth.routes.js"
+import { getSignedCookies } from "@aws-sdk/cloudfront-signer";
 app.use('/api/user', userRoutes)
 app.use('/api/otp', otpRoutes)
 app.use('/api/audio', audioRoutes)
@@ -56,6 +57,7 @@ app.get('/upload-file', async (req, res) => {
 app.get('/api/get-audio/:audioId/:bitrate', async (req, res) => {
     const { audioId, bitrate } = req.params;
     console.log("function run hua tha");
+
     const privateKey = fs.readFileSync("./private_key.pem", "utf-8");
     const keyPairId = process.env.AWS_CLOUDFRONT_KEY_PAIR_ID
 
@@ -72,43 +74,60 @@ app.get('/api/get-audio/:audioId/:bitrate', async (req, res) => {
             }
         ]
     };
-
     const policyString = JSON.stringify(policy);
 
-    
-    const policyStringBase64 = Buffer.from(policyString).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    const urlForFile = `${process.env.AWS_CLOUDFRONT_DOMAIN}/audio/${audioId}/${bitrate}k/index.m3u8`;
+
+    const signedCookies = getSignedCookies({
+        keyPairId,
+        privateKey,
+        policy:policyString
+    })
 
 
-    const signature = crypto.sign('sha256', Buffer.from(policyString), {
-        key: privateKey,
-        padding: crypto.constants.RSA_PKCS1_PADDING,
-    }).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 
-    console.log("signature", signature);
-    console.log("policy string", policyStringBase64);
-    console.log("key pair id", keyPairId);
 
-    res.cookie('CloudFront-Policy', policyStringBase64, {
+    // const policyStringBase64 = Buffer.from(policyString).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+
+
+    // const signature = crypto.sign('sha256', Buffer.from(policyString), {
+    //     key: privateKey,
+    //     padding: crypto.constants.RSA_PKCS1_PADDING,
+    // }).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+
+    // console.log("signature", signature);
+    // console.log("policy string", policyStringBase64);
+    // console.log("key pair id", keyPairId);
+
+    console.log("signed cookies", signedCookies);
+
+    const cookieOption = {
         httpOnly: true,
         secure: true,
         domain: '.ayushverma.dev',
         sameSite: 'none',
         path: '/',
+    }
+
+    Object.keys(signedCookies).map((key) => {
+        res.cookie(key, signedCookies[key], cookieOption)
     })
-    res.cookie('CloudFront-Signature', signature, {
-        httpOnly: true,
-        secure: true,
-        domain: '.ayushverma.dev',
-        sameSite: 'none',
-        path: '/',
-    })
-    res.cookie('CloudFront-Key-Pair-Id', keyPairId, { 
-        httpOnly: true,
-        secure: true,
-        domain: '.ayushverma.dev',
-        sameSite: 'none',
-        path: '/',
-    })
+
+    // res.cookie('CloudFront-Policy', policyStringBase64, )
+    // res.cookie('CloudFront-Signature', signature, {
+    //     httpOnly: true,
+    //     secure: true,
+    //     domain: '.ayushverma.dev',
+    //     sameSite: 'none',
+    //     path: '/',
+    // })
+    // res.cookie('CloudFront-Key-Pair-Id', keyPairId, { 
+    //     httpOnly: true,
+    //     secure: true,
+    //     domain: '.ayushverma.dev',
+    //     sameSite: 'none',
+    //     path: '/',
+    // })
 
     let cookie = {
         "CloudFront-Policy": policyStringBase64,
@@ -120,13 +139,7 @@ app.get('/api/get-audio/:audioId/:bitrate', async (req, res) => {
         message: "Audio Stream",
         url: `${process.env.AWS_CLOUDFRONT_DOMAIN}/audio/${req.params.audioId}/${req.params.bitrate}/index.m3u8`,
         cookie,
-        cookeiSettings: {
-            httpOnly: true,
-            secure: true,
-            domain: 'da7xhgecx5wu2.cloudfront.net',
-            sameSite: 'none',
-            path: '/',
-        }
+        cookieOption
     })
 })
 
