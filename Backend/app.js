@@ -5,6 +5,7 @@ import reqLogger from "./utils/reqLogger.js";
 import apiResponse from "./utils/apiResponse.js";
 import cookieParser from "cookie-parser";
 import crypto from "crypto"
+import fs from "fs"
 
 dotenv.config();
 const app = express();
@@ -55,7 +56,7 @@ app.get('/upload-file', async (req, res) => {
 app.get('/api/get-audio/:audioId/:bitrate', async (req, res) => {
     const { audioId, bitrate } = req.params;
     console.log("function run hua tha");
-    const privateKey = process.env.AWS_CLOUDFRONT_PRIVATE_KEY
+    const privateKey = fs.readFileSync("./private_key.pem", "utf-8");
     const keyPairId = process.env.AWS_CLOUDFRONT_KEY_PAIR_ID
 
     const resourcePath = `${process.env.AWS_CLOUDFRONT_DOMAIN}/*`;
@@ -73,6 +74,8 @@ app.get('/api/get-audio/:audioId/:bitrate', async (req, res) => {
     };
 
     const policyString = JSON.stringify(policy);
+
+    
     const policyStringBase64 = Buffer.from(policyString).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 
 
