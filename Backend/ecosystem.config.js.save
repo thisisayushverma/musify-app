@@ -1,0 +1,7 @@
+export default {
+  apps : [{
+    name : "app1", script : "./index.js", autostart : true, watch : 
+    false , instance : 1,
+    
+  }]
+}
