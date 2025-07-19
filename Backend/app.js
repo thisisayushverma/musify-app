@@ -55,7 +55,7 @@ app.get('/upload-file', async (req, res) => {
 app.get('/api/get-audio/:audioId/:bitrate', async (req, res) => {
     const { audioId, bitrate } = req.params;
     console.log("function run hua tha");
-    const privateKey = process.env.AWS_CLOUDFRONT_PRIVATE_KEY
+    const privateKey = process.env.AWS_CLOUDFRONT_PRIVATE_KEY.replace(/\\n/g,'\n')
     const keyPairId = process.env.AWS_CLOUDFRONT_KEY_PAIR_ID
 
     const resourcePath = `${process.env.AWS_CLOUDFRONT_DOMAIN}/*`;
@@ -87,19 +87,22 @@ app.get('/api/get-audio/:audioId/:bitrate', async (req, res) => {
 
     res.cookie('CloudFront-Policy', policyStringBase64, {
         httpOnly: true,
-        domain: 'cloudfront.net',
+        domain: '.ayushverma.dev',
         sameSite: 'none',
+        secure: true,
         path: '/',
     })
     res.cookie('CloudFront-Signature', signature, {
         httpOnly: true,
-        domain: 'cloudfront.net',
+        domain: '.ayushverma.dev',
         sameSite: 'none',
+	secure: true,
         path: '/',
     })
     res.cookie('CloudFront-Key-Pair-Id', keyPairId, { 
         httpOnly: true,
-        domain: 'cloudfront.net',
+        domain: '.ayushverma.dev',
+	secure: true,
         sameSite: 'none',
         path: '/',
     })
