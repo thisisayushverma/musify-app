@@ -5,6 +5,7 @@ import reqLogger from "./utils/reqLogger.js";
 import apiResponse from "./utils/apiResponse.js";
 import cookieParser from "cookie-parser";
 import crypto from "crypto"
+import fs from "fs"
 
 dotenv.config();
 const app = express();
@@ -55,7 +56,8 @@ app.get('/upload-file', async (req, res) => {
 app.get('/api/get-audio/:audioId/:bitrate', async (req, res) => {
     const { audioId, bitrate } = req.params;
     console.log("function run hua tha");
-    const privateKey = process.env.AWS_CLOUDFRONT_PRIVATE_KEY.replace(/\\n/g,'\n')
+    //const privateKey = process.env.AWS_CLOUDFRONT_PRIVATE_KEY.replace(/\\n/g,'\n')
+    const privateKey = fs.readFileSync("./private_key.pem", "utf-8");
     const keyPairId = process.env.AWS_CLOUDFRONT_KEY_PAIR_ID
 
     const resourcePath = `${process.env.AWS_CLOUDFRONT_DOMAIN}/*`;
@@ -73,15 +75,22 @@ app.get('/api/get-audio/:audioId/:bitrate', async (req, res) => {
     };
 
     const policyString = JSON.stringify(policy);
-    const policyStringBase64 = Buffer.from(policyString).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    const policyStringBase64 = Buffer.from(policyString).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 
 
-    const signature = crypto.sign('sha256', Buffer.from(policyString), {
-        key: privateKey,
-        padding: crypto.constants.RSA_PKCS1_PADDING,
-    }).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    const signer = crypto.createSign('RSA-SHA1');
+	signer.update(policyString);
+	const signature = signer.sign({
+	    key: privateKey,
+	    padding: crypto.constants.RSA_PKCS1_PADDING
+	});
 
-    console.log("signature", signature);
+	
+
+    const encodedSignature = signature.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+
+    console.log("signature", encodedSignature);
     console.log("policy string", policyStringBase64);
     console.log("key pair id", keyPairId);
 
@@ -92,7 +101,7 @@ app.get('/api/get-audio/:audioId/:bitrate', async (req, res) => {
         secure: true,
         path: '/',
     })
-    res.cookie('CloudFront-Signature', signature, {
+    res.cookie('CloudFront-Signature', encodedSignature, {
         httpOnly: true,
         domain: '.ayushverma.dev',
         sameSite: 'none',
