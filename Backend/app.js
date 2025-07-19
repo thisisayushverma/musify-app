@@ -129,16 +129,16 @@ app.get('/api/get-audio/:audioId/:bitrate', async (req, res) => {
     //     path: '/',
     // })
 
-    let cookie = {
-        "CloudFront-Policy": policyStringBase64,
-        "CloudFront-Signature": signature,
-        "CloudFront-Key-Pair-Id": keyPairId
-    }
+    // let cookie = {
+    //     "CloudFront-Policy": policyStringBase64,
+    //     "CloudFront-Signature": signature,
+    //     "CloudFront-Key-Pair-Id": keyPairId
+    // }
     res.status(200).json({
         status: 200,
         message: "Audio Stream",
         url: `${process.env.AWS_CLOUDFRONT_DOMAIN}/audio/${req.params.audioId}/${req.params.bitrate}/index.m3u8`,
-        cookie,
+        signedCookies,
         cookieOption
     })
 })
