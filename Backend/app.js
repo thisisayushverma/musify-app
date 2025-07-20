@@ -76,7 +76,7 @@ app.get('/api/get-audio/:audioId/:bitrate', async (req, res) => {
     };
     const policyString = JSON.stringify(policy);
 
-    const urlForFile = `${process.env.AWS_CLOUDFRONT_DOMAIN}/${audioId}/${bitrate}k/index.m3u8`;
+    const urlForFile = `${process.env.AWS_CLOUDFRONT_DOMAIN}/${audioId}/${bitrate}/index.m3u8`;
 
     const signedCookies = getSignedCookies({
         keyPairId,
