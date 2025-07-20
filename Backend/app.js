@@ -76,7 +76,7 @@ app.get('/api/get-audio/:audioId/:bitrate', async (req, res) => {
     };
     const policyString = JSON.stringify(policy);
 
-    const urlForFile = `${process.env.AWS_CLOUDFRONT_DOMAIN}/audio/${audioId}/${bitrate}k/index.m3u8`;
+    const urlForFile = `${process.env.AWS_CLOUDFRONT_DOMAIN}/${audioId}/${bitrate}k/index.m3u8`;
 
     const signedCookies = getSignedCookies({
         keyPairId,
@@ -137,7 +137,7 @@ app.get('/api/get-audio/:audioId/:bitrate', async (req, res) => {
     res.status(200).json({
         status: 200,
         message: "Audio Stream",
-        url: `${process.env.AWS_CLOUDFRONT_DOMAIN}/audio/${req.params.audioId}/${req.params.bitrate}/index.m3u8`,
+        url: urlForFile,
         signedCookies,
         cookieOption
     })
