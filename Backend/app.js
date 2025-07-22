@@ -61,7 +61,7 @@ app.get('/api/get-audio/:audioId/:bitrate', async (req, res) => {
     const privateKey = fs.readFileSync("./private_key.pem", "utf-8");
     const keyPairId = process.env.AWS_CLOUDFRONT_KEY_PAIR_ID
 
-    const resourcePath = `${process.env.AWS_CLOUDFRONT_DOMAIN}/audio/${audioId}/${bitrate}/*`;
+    const resourcePath = `${process.env.AWS_CLOUDFRONT_DOMAIN}/${audioId}/${bitrate}/*`;
     const policy = {
         Statement: [
             {
@@ -76,7 +76,7 @@ app.get('/api/get-audio/:audioId/:bitrate', async (req, res) => {
     };
     const policyString = JSON.stringify(policy);
 
-    const urlForFile = `${process.env.AWS_CLOUDFRONT_DOMAIN}/audio/${audioId}/${bitrate}/index.m3u8`;
+    const urlForFile = `${process.env.AWS_CLOUDFRONT_DOMAIN}/${audioId}/${bitrate}/index.m3u8`;
 
     const signedCookies = getSignedCookies({
         keyPairId,
