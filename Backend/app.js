@@ -61,7 +61,7 @@ app.get('/api/get-audio/:audioId/:bitrate', async (req, res) => {
     const privateKey = fs.readFileSync("./private_key.pem", "utf-8");
     const keyPairId = process.env.AWS_CLOUDFRONT_KEY_PAIR_ID
 
-    const resourcePath = `https://dlcay3kfqxg1n.cloudfront.net/*`;
+    const resourcePath = `${process.env.AWS_CLOUDFRONT_DOMAIN}/*`;
     const policy = {
         Statement: [
             {
