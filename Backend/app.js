@@ -102,7 +102,6 @@ app.get('/api/get-audio/:audioId/:bitrate', async (req, res) => {
     console.log("signed cookies", signedCookies);
 
     const cookieOption = {
-        httpOnly: true,
         secure: true,
         domain: '.ayushverma.dev',
         sameSite: 'none',
