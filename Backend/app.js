@@ -1,5 +1,7 @@
-import express from "express";
 import cors from "cors";
+dotenv.config();
+
+import express from "express";
 import dotenv from "dotenv";
 import reqLogger from "./utils/reqLogger.js";
 import apiResponse from "./utils/apiResponse.js";
@@ -7,7 +9,6 @@ import cookieParser from "cookie-parser";
 import crypto from "crypto"
 import fs from "fs"
 
-dotenv.config();
 const app = express();
 
 app.use(cors({
