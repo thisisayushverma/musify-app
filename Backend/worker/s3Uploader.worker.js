@@ -6,7 +6,7 @@ import IORedis from "ioredis";
 import { deleteFileFromFolder, readAllFileInsideFolderAndUploadToS3 } from "../utils/operationOnFile.js";
 
 
-console.log("AWS_REGION:", process.env.AWS_BUCKET_REGION);
+// console.log("AWS_REGION:", process.env.AWS_BUCKET_REGION);
 
 
 const connection = new IORedis({
