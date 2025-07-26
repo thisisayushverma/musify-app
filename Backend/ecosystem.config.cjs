@@ -11,6 +11,7 @@ module.exports =  {
   {
     name: "S3UploaderWorker",
     script: "./worker/s3Uploader.worker.js",
+    node_args: "-r dotenv/config --experimental-json-modules",
     autorestart: true,
     watch: false,
   },
