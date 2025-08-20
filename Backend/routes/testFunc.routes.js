@@ -3,6 +3,8 @@ import { deleteFileFromS3, getAllFileAndFolderFromBucket, uploadAudioFile } from
 import { readAllFileInsideFolderAndUploadToS3 } from "../utils/operationOnFile.js";
 import { cloudinaryUpload } from "../utils/cloudinary.js";
 import { upload } from "../utils/multer.js";
+import { handleSearch } from "../controllers/search.controller.js";
+
 
 const router = Router();
 
@@ -37,5 +39,7 @@ router.post('/upload-image',upload.single("thumbnail"),async (req,res)=>{
     console.log(result);
     res.send(result)
 })
+
+router.get('/search/:search',handleSearch)
 
 export default router

@@ -8,6 +8,7 @@ const handleCheckAccessTokenPresent = asyncHandler(async (req,res)=>{
     const incomingRefreshToken = req.cookies?.refreshToken || req.headers?.refreshToken?.split(" ")[1];
 
     const user = req.body;
+    console.log("user for auth ",user);
 
     if(!incomingRefreshToken || !user){
         const error = new Error("Unauthenticated,Login Please")

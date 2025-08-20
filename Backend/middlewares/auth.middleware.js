@@ -8,7 +8,9 @@ const authMiddleware = async (req,res,next)=>{
     const accessToken = req.cookies?.accessToken  || req.headers?.authorization?.split(" ")[1];
     const refreshToken = req.cookies?.refreshToken || req.headers?.refreshToken?.split(" ")[1];
 
+
     if(!accessToken && !refreshToken){
+        console.log("both cookies not found");
         const error = new Error("Unauthorized");
         error.status=401;
         throw error;
@@ -16,6 +18,7 @@ const authMiddleware = async (req,res,next)=>{
 
 
     if(!accessToken){
+        console.log("refresh token found");
         // create new access token if refreshToken is valid
 
         const decodedRefreshToken = await User.decodedRefreshToken(refreshToken);
@@ -44,6 +47,7 @@ const authMiddleware = async (req,res,next)=>{
         throw error;
     }
 
+    console.log("both token is found");
 
     // check access token is correct or not
     const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);

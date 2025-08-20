@@ -26,15 +26,22 @@ import userRoutes from "./routes/user.routes.js"
 import otpRoutes from "./routes/otp.routes.js"
 import audioRoutes from "./routes/audio.routes.js"
 import testRoutes from "./routes/testFunc.routes.js"
+import searchRoutes from "./routes/search.routes.js"
+import playlistRoutes from "./routes/playlist.routes.js"
 import { readAllFileInsideFolderAndUploadToS3 } from "./utils/operationOnFile.js"
 import { getAudioStream } from "./utils/awsS3Bucket.js";
 import authRoutes from "./routes/auth.routes.js"
 import { getSignedCookies } from "@aws-sdk/cloudfront-signer";
+
+
+
 app.use('/api/user', userRoutes)
 app.use('/api/otp', otpRoutes)
 app.use('/api/audio', audioRoutes)
 app.use('/api/test', testRoutes)
 app.use('/api/auth', authRoutes)
+app.use('/api/search', searchRoutes)
+app.use('/api/playlist', playlistRoutes)
 app.get('/', (req, res) => res.send("Hello world"));
 // app.get('/convert-audio',async (req,res)=>{
 //     console.log("convert-audio");

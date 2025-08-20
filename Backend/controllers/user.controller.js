@@ -103,7 +103,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
             const userData = {
                 name: userExists.name,
                 email: userExists.email,
-                id: userExists._id,
+                _id: userExists._id,
             }
             res.status(201).json(apiResponse(201, true, "Login Successfully", { ...userData }));
         }
