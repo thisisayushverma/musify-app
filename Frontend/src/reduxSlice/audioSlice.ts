@@ -16,12 +16,13 @@ const audioFromLocalStorage = JSON.parse(localStorage.getItem(config.audioDetail
 
 
 const initialState: IAudio = {
-    audioTitle: audioFromLocalStorage?.audioTitle || "",
-    audioUrl: audioFromLocalStorage?.audioUrl || "",
-    audioId: audioFromLocalStorage?.audioId || "",
+    audioTitle: audioFromLocalStorage?.audioTitle || "Demon Slayer",
+    audioUrl: audioFromLocalStorage?.audioUrl || "63985a4b-ab21-43e1-a922-a0a52b322ec2",
+    audioId: audioFromLocalStorage?.audioId || "686667963b6b2a0376421645",
     isLiked: audioFromLocalStorage?.isLiked || false,
-    artist: audioFromLocalStorage?.artist || "",
-    audioThumbnail: audioFromLocalStorage?.audioThumbnail || ""
+    artist: audioFromLocalStorage?.artist || "683add8d47c27cdca0f0eb04",
+    audioThumbnail: audioFromLocalStorage?.audioThumbnail || "https://res.cloudinary.com/dpvnvk0ps/image/upload/v1751567530/aivcxvrdcwwcjacoxhcx.jpg"
+
 }
 
 const audioSlice = createSlice({

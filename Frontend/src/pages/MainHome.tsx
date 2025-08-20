@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { getUserDetails } from "../features/auth.ts";
 import Loading from "./Loading.tsx";
@@ -31,7 +31,7 @@ function MainHome() {
     fetchUserDetails();
 
   }, []);
-  return <>{ready ? <Outlet /> : <Loading />}</>;
+  return <div className="h-full max-h-screen">{ready ? <Outlet /> : <Loading />}</div>;
 }
 
 export default MainHome;

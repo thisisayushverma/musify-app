@@ -28,12 +28,14 @@ const router = createBrowserRouter(
   <Route path="/" element={<MainHome/>}>
     <Route path="" element={<App />}>
       <Route path="" element={<Home />} />
-      <Route path="search" element={<AuthLayout authentication={false} ><Search/></AuthLayout>}/>
+      <Route path="search" element={<Search/>}/>
+      <Route path="search/:search" element={<Search/>}/>
       <Route path="your-library" element={<AuthLayout authentication={true} ><Library /></AuthLayout>} />
       <Route path="liked-songs" element={<AuthLayout authentication={true} ><LikedSongs /></AuthLayout>} />
       <Route path="create-playlist" element={<AuthLayout authentication={true} ><CreatePlaylist /></AuthLayout>} />
       <Route path="upload-songs" element={<AuthLayout authentication={true} ><UploadSongs /></AuthLayout>} />
     </Route>
+
     <Route>
       <Route path="register" element={<AuthLayout authentication={false} ><Register/></AuthLayout>}/>
       <Route path="verify-otp" element={<OtpPage/>}/>

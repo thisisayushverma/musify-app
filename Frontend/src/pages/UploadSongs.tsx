@@ -18,6 +18,7 @@ function UploadSongs() {
   const [audioId,setAudioId] = useState("");
   const [duration,setDuration] = useState<number>(0);
   const navigate = useNavigate();
+  const [loading,setLoading] = useState(false);
 
   // Functions
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,6 +39,7 @@ function UploadSongs() {
 
   const handleInputFile = async () => {
     if (audioFile) {
+      setLoading(true);
       console.log("btn clicked");
       console.log(audioFile);
       try {
@@ -47,6 +49,7 @@ function UploadSongs() {
       } catch (error) {
         alert("Error"+error)
       }
+      setLoading(false);
     }
     else{
       alert("Upload Audio File First.....")
@@ -89,6 +92,7 @@ function UploadSongs() {
     }
 
     try {
+      setLoading(true);
       console.log(duration);
       const result = await createAudioSchema({title:titleInput,duration:duration,genre:selectedGenre,thumbnail:thumbnailFile,tags,audioId,isPublic})
       console.log("result after audio uploaded",result);
@@ -105,13 +109,14 @@ function UploadSongs() {
       navigate('/')
     }
 
+    setLoading(false);
   }
 
 
 
   return (
-    <div className="border-1 border-white h-full m-1 rounded-xl flex items-center justify-center overflow-auto">
-      {!showForm ? (
+    <div className=" border-white h-full  m-1 rounded-xl flex items-center justify-center overflow-y-auto ">
+      { loading ? <div>"Loading..."</div> : !showForm ? (
         <div className="w-[50%]">
           <label
             htmlFor="fileInput"
@@ -137,7 +142,7 @@ function UploadSongs() {
           </label>
         </div>
       ) : (
-        <div className="w-[50%] flex flex-col h-full">
+        <div className="w-[60%] h-full flex flex-col ">
           <audio
             controls
             src={audioFile ? URL.createObjectURL(audioFile) : ""}
@@ -270,12 +275,16 @@ function UploadSongs() {
                 className="border-1  border-white rounded-lg p-1 px-2"
               />
             </label>
+
             <button type="button" className="bg-green-600 cursor-pointer m-auto my-5 p-3 text-lg font-bold rounded-lg w-[70%]" onClick={handleAudioUpload}>
               Upload Song
             </button>
+
           </form>
+          
         </div>
-      )}
+      )
+      }
     </div>
   );
 }

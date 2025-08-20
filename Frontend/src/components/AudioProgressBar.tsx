@@ -35,11 +35,13 @@ function AudioProgressBar({}: Props) {
     if (!audio) return;
     // console.log("audio element", audioRef);
 
-    const hls = new Hls({
+    const hls = new Hls(
+      {
       xhrSetup: function(xhr, url) {
         xhr.withCredentials = true;
       }
-    });
+    }
+  );
 
     const handleFetchAudioUrl = async () => {
       const response = await fetch(
@@ -67,6 +69,7 @@ function AudioProgressBar({}: Props) {
           console.log("audio loadedd");
           
           hls.loadSource(audioApi);
+          // hls.loadSource("https://s3.us-east-1.amazonaws.com/musify.audio.file/audio/63985a4b-ab21-43e1-a922-a0a52b322ec2/128k/index.m3u8");
           hls.attachMedia(audio);
           // console.log(hls);
         } else {
@@ -88,7 +91,7 @@ function AudioProgressBar({}: Props) {
     return () => {
       hls.destroy();
     };
-  }, []);
+  }, [audioUrl]);
 
   useEffect(() => {
     // this for play and pause from custom to audio element
@@ -150,8 +153,8 @@ function AudioProgressBar({}: Props) {
   });
 
   return (
-    <div className="flex  justify-between items-center w-full gap-2  text-gray-500">
-      <audio ref={audioRef} controls className="w-full hidden"></audio>
+    <div className="flex justify-between items-center w-full gap-2  text-gray-500">
+      <audio ref={audioRef} controls className="w-full "></audio>
 
       <p>{currentTime}</p>
 

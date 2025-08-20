@@ -20,7 +20,7 @@ const location = useLocation();
   );
   
   // console.log("time two",Date.now());
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   
   useEffect(() => {
     // if isAuth is true then i'checking that accessToken getting new accessToken if it is expired1
@@ -30,6 +30,7 @@ const location = useLocation();
       setIsLoading(true);
       if (isAuthenticated) {
         try {
+          console.log("user for auth check", user);
           const response = await fetch(
             config.backendUrl + "/auth/check-access-token-present",
             {
@@ -56,13 +57,14 @@ const location = useLocation();
                   body: JSON.stringify(user),
                 }
               );
-
               // console.log(responseOfRegeneration);
             } else {
               // server error show
               console.log("something went wrong");
             }
           }
+
+          
         } catch (error) {
           console.log(error);
         }
@@ -70,7 +72,9 @@ const location = useLocation();
       setIsLoading(prev =>!prev);
     };
 
-    checkAuthorization();
+    if(authentication){
+      checkAuthorization(); 
+    }
     // console.log("time three",Date.now());
     // console.log("middleware called after");
     
@@ -89,7 +93,7 @@ const location = useLocation();
   }
   // console.log("time seven",Date.now());
 
-  return <>{isLoading?<>Loading...</>:children}</>;
+  return <div className="h-full ">{isLoading?<>Loading...</>:children}</div>;
 }
 
 export default AuthLayout;

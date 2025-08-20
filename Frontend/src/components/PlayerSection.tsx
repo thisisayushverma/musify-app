@@ -16,6 +16,7 @@ function PlayerSection() {
     const [isShuffle,setIsShuffle]= useState<Boolean>(false)
     const [isRepeatedOn,setIsRepeatedOn]= useState<number>(0)
 
+    
   return (
     <div className="m-4 w-full stic">
       <div className="flex gap-2 items-center">

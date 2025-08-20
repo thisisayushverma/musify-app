@@ -44,7 +44,6 @@ const LoginPage = () => {
             console.log(store.getState());
             navigate('/');
             console.log("code after navigate to home page");
-            
         }
         else if(response.status === 403){
             navigate('/verify-otp',{state:{email:form.email}});

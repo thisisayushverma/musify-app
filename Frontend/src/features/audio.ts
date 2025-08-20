@@ -2,6 +2,7 @@ import config from "../config/config"
 
 const backendUrl = config.backendUrl + "/audio";
 
+
 interface IUploadFileCredentials {
     file:File
 }
@@ -24,6 +25,8 @@ const uplaodAudioFile = async ({file}:IUploadFileCredentials)=>{
         throw error
     }
 }
+
+
 
 
 interface IAudioSchema{
@@ -88,8 +91,45 @@ const getAllYourAudio = async()=>{
     }
 }
 
+const getTopHits = async()=>{
+        try {
+            const response = await fetch(config.backendUrl+"/audio/top-hits",{
+                credentials:"include",
+                method:"GET"
+            })
+            
+            if(!response.ok){
+                throw new Error("error while getting top hits"+response);
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.log(error);
+            
+        }
+}
+
+const getNewReleases = async()=>{
+    try {
+        const response = await fetch(config.backendUrl+"/audio/new-releases",{
+            credentials:"include",
+            method:"GET"
+        })
+
+        if(!response.ok){
+            throw new Error("error while getting top hits"+response);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export {
     uplaodAudioFile,
     createAudioSchema,
-    getAllYourAudio
+    getAllYourAudio,
+    getTopHits,
+    getNewReleases
 }

@@ -123,10 +123,28 @@ const getUserDetails = async () => {
     return response;
 };
 
+const handleLogout = async () => {
+    const response = await fetch(config.backendUrl + "/user/logout", {
+        credentials: "include",
+        method: "POST",
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        
+        return data;
+    })
+    .catch((error) => {
+        console.log("data status code not 201", error);
+    });
+    return response;
+};
+
+
 export {
     registerHandle,
     otpVerifyHandle,
     otpResendHandler,
     loginHandle,
-    getUserDetails
+    getUserDetails,
+    handleLogout
 }

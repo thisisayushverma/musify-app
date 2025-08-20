@@ -6,7 +6,7 @@ interface IUser {
     loading: boolean;
     error: string | null;
     user: {
-        id: string;
+        _id: string;
         name: string;
         email: string;
         avatarUrl?: string;
@@ -30,7 +30,7 @@ interface ILoginCretentials {
 
 interface ILoginResponse {
     user: {
-        id: string;
+        _id: string;
         name: string;
         email: string;
         avatarUrl?: string;
@@ -54,7 +54,7 @@ const loginUser = createAsyncThunk<ILoginResponse, ILoginCretentials>('user/logi
 
                 return {
                     user: {
-                        id: data.user.id,
+                        _id: data.user._id,
                         name: data.user.name,
                         email: data.user.email,
                         avatarUrl: data.user.avatarUrl
@@ -91,6 +91,8 @@ const userSlice = createSlice({
         setUserLogin:(state,action)=>{
             state.user = action.payload.user
             state.isAuthenticated = true
+            localStorage.setItem(config.userAuthLocalStorageKey,JSON.stringify(true))
+            localStorage.setItem(config.userDataLocalStorageKey,JSON.stringify(action.payload.user))
         }
     },
     extraReducers : (builder) =>{

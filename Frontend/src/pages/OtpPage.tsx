@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
 import { otpResendHandler, otpVerifyHandle } from "../features/auth";
-
+import { useNavigate } from "react-router-dom";
 const OtpPage: React.FC = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const { email } = location.state || {};
   const [otp, setOtp] = useState("");
@@ -35,7 +36,7 @@ const OtpPage: React.FC = () => {
     if(response){
       if (response.status === 201) {
         setSuccess("OTP verified successfully!");
-        // navigate("/dashboard");
+        navigate("/");
       } else if (response.status === 401) {
         setError(response.message);
       } else {
